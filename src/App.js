@@ -1,10 +1,15 @@
 import Form from "./components/Form";
 import Cita from "./components/Cita";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 function App() {
 
-  const [citas, addCitas] = useState([]);
+  let citasIniciales = JSON.parse(localStorage.getItem('citas')) || [];
+  const [citas, addCitas] = useState(citasIniciales);
+
+  useEffect(() => {
+    localStorage.setItem('citas', JSON.stringify(citas || []));
+  }, [citas])
 
   const addCita = (cita) => {
     addCitas([...citas, cita])
@@ -12,6 +17,7 @@ function App() {
 
   const deleteCita = (id) => {
     const lastCitas = citas.filter(cita => cita.id !== id)
+
     addCitas(lastCitas);
   }
 
